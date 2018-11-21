@@ -1,6 +1,6 @@
 <template>
-  <div class="member-container">
-    MemberContainer
+  <div class="shopcar-container">
+    ShopcarContainer
   </div>
 </template>
 
