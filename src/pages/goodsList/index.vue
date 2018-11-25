@@ -1,77 +1,67 @@
 <template>
     <div class="goods-list">
-        <div class="goods-item">
-            <img src="http://i8.mifile.cn/a1/pms_1527735168.55324506!560x560.jpg">
-            <h1 class="title">
-                小米8
-                <br>
-                <span>6GB+128GB 白色</span>
-            </h1>
+        <!-- <router-link class="goods-item" v-for="item in goodslist" :key="item.id" :to="'/home/goodsInfo/'+item.id" tag="div">
+            <img :src="item.img_url">
+            <h1 class="title">{{ item.title }}</h1>
             <div class="info">
                 <p class="price">
-                    <span class="now">￥2699</span>
-                    <span class="old">￥2999</span>
+                    <span class="now">￥{{ item.sell_price }}</span>
+                    <span class="old">￥{{ item.market_price }}</span>
                  </p>
                 <p class="sell">
                     <span>热卖中</span>
-                    <span>剩60件</span>
+                    <span>剩{{ item.stock_quantity }}件</span>
                 </p>
             </div>
-        </div>
-        <div class="goods-item">
-            <img src="https://i8.mifile.cn/a1/pms_1540429657.8272281!560x560.jpg">
-            <h1 class="title">
-                小米MIX3
-                <br>
-                <span>8GB+128GB 黑色</span>
-            </h1>
+        </router-link> -->
+        <div class="goods-item" v-for="item in goodslist" :key="item.id" @click="goDetail(item.id)">
+            <img :src="item.img_url">
+            <h1 class="title">{{ item.title }}</h1>
             <div class="info">
                 <p class="price">
-                    <span class="now">￥3599</span>
+                    <span class="now">￥{{ item.sell_price }}</span>
+                    <span class="old">￥{{ item.market_price }}</span>
                  </p>
                 <p class="sell">
                     <span>热卖中</span>
-                    <span>剩60件</span>
+                    <span>剩{{ item.stock_quantity }}件</span>
                 </p>
             </div>
         </div>
-        <div class="goods-item">
-            <img src="https://i8.mifile.cn/a1/pms_1539931570.3843664!560x560.jpg">
-            <h1 class="title">
-                小米8青春版
-                <br>
-                <span>4GB+64GB 蓝色</span>
-            </h1>
-            <div class="info">
-                <p class="price">
-                    <span class="now">￥1399</span>
-                 </p>
-                <p class="sell">
-                    <span>热卖中</span>
-                    <span>剩60件</span>
-                </p>
-            </div>
-        </div>
-        <div class="goods-item">
-            <img src="https://i8.mifile.cn/a1/pms_1539913759.18356169!560x560.jpg">
-            <h1 class="title">
-                黑鲨游戏手机 Helo
-                <br>
-                <span>8GB+128GB 黑色</span>
-            </h1>
-            <div class="info">
-                <p class="price">
-                    <span class="now">￥3499</span>
-                 </p>
-                <p class="sell">
-                    <span>热卖中</span>
-                    <span>剩60件</span>
-                </p>
-            </div>
-        </div>
-
+        <mt-button type="danger" size="large" @click="getMore">加载更多</mt-button>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            pageindex: 1,
+            goodslist: []
+        };
+    },
+    created() {
+        this.getGoodsList();
+    },
+    methods: {
+        getGoodsList() {
+            this.$http.get("api/getgoods?pageindex=" + this.pageindex)
+            .then(result => {
+                if (result.body.status === 0) {
+                    this.goodslist = result.body.message;
+                }
+            })
+        },
+        getMore() {
+            this.pageindex++;
+            this.getGoodsList();
+        },
+        goDetail(id) {
+            this.$router.push({ name: "goodsInfo", params: { id }})
+        }
+    }
+}
+</script>
 
 <style lang="less">
 .goods-list {
@@ -93,9 +83,7 @@
             width: 100%;
         }
         .title {
-            font-weight: 700;
             span {
-                font-weight: 400;
                 font-size: 14px;
             }
         }
