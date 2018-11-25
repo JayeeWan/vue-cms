@@ -10,6 +10,8 @@ Vue.use(VueResource)
 
 Vue.http.options.root = 'http://www.lovegf.cn:8899/'
 
+Vue.http.options.emulateJSON = true
+
 Vue.config.productionTip = false
 
 // 按需导入需要的mint-ui组件
@@ -32,6 +34,12 @@ import './lib/mui/css/icons-extra.css'
 
 // 引入自己的全局样式
 import './css/common.less'
+
+import VueLazyload from 'vue-lazyload'
+Vue.use(VueLazyload)
+
+import VuePreview from 'vue2-preview'
+Vue.use(VuePreview)
 
 Vue.filter('dateFormat', function(dateStr,pattern='YYYY-MM-DD HH:mm:ss') {
   return moment(dateStr).format(pattern)
